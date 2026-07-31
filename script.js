@@ -519,7 +519,133 @@ function createSceneOneChart(data) {
     .on("mousemove", moveTooltip)
     .on("mouseleave", hideTooltip);
 
+  /*
+   * Add the always-visible 2020 annotation.
+   */
+  addSceneOnePersistentTooltip(
+    plotGroup,
+    yearScale,
+    valueScale,
+    innerWidth,
+    innerHeight
+  );
+
+
   updateSceneOneSummary(sceneData);
+  
+}
+
+/**
+ * Adds an always-visible annotation explaining the 2020 household decrease.
+ *
+ * Inputs:
+ * plotGroup - the main SVG group containing the chart
+ * yearScale - converts years into horizontal positions
+ * valueScale - converts values into vertical positions
+ * innerWidth - usable chart width
+ * innerHeight - usable chart height
+ */
+function addSceneOnePersistentTooltip(
+  plotGroup,
+  yearScale,
+  valueScale,
+  innerWidth,
+  innerHeight
+) {
+  const annotationYear = 2020;
+
+  /*
+   * Find the horizontal center of the 2020 bar group.
+   */
+  const targetX =
+    yearScale(annotationYear) +
+    yearScale.bandwidth() / 2;
+
+  /*
+   * The decrease falls below zero, but Scene 1 currently starts its
+   * vertical axis at zero. Point the annotation toward the zero line.
+   */
+  const targetY = valueScale(0);
+
+  /*
+   * Position the annotation above and to the left of 2020.
+   */
+  const tooltipWidth = 290;
+  const tooltipHeight = 66;
+
+  const tooltipX = Math.max(
+    10,
+    Math.min(targetX - 180, innerWidth - tooltipWidth - 10)
+  );
+
+  const tooltipY = Math.max(
+    20,
+    valueScale(2400)
+  );
+
+  const annotationGroup = plotGroup
+    .append("g")
+    .attr("class", "persistent-chart-tooltip");
+
+  /*
+   * Draw a connector line from the annotation to 2020.
+   */
+  annotationGroup
+    .append("path")
+    .attr(
+      "d",
+      `
+        M ${tooltipX + tooltipWidth / 2} ${tooltipY + tooltipHeight}
+        C ${targetX - 30} ${tooltipY + tooltipHeight + 45},
+          ${targetX - 10} ${targetY - 70},
+          ${targetX} ${targetY - 12}
+      `
+    )
+    .attr("class", "persistent-tooltip-line");
+
+  /*
+   * Add a small circle where the connector points.
+   */
+  annotationGroup
+    .append("circle")
+    .attr("class", "persistent-tooltip-target")
+    .attr("cx", targetX)
+    .attr("cy", targetY - 12)
+    .attr("r", 5);
+
+  /*
+   * Draw the tooltip background.
+   */
+  annotationGroup
+    .append("rect")
+    .attr("class", "persistent-tooltip-background")
+    .attr("x", tooltipX)
+    .attr("y", tooltipY)
+    .attr("width", tooltipWidth)
+    .attr("height", tooltipHeight)
+    .attr("rx", 8);
+
+  /*
+   * Add the tooltip title.
+   */
+  annotationGroup
+    .append("text")
+    .attr("class", "persistent-tooltip-title")
+    .attr("x", tooltipX + 14)
+    .attr("y", tooltipY + 24)
+    .text("2020 household decrease");
+
+  /*
+   * Add the explanatory sentence.
+   */
+  annotationGroup
+    .append("text")
+    .attr("class", "persistent-tooltip-text")
+    .attr("x", tooltipX + 14)
+    .attr("y", tooltipY + 46)
+    .text("New household formation was below zero.");
+
+    
 }
 
 /*

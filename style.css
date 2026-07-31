@@ -526,3 +526,39 @@ h1 {
     min-height: 400px;
   }
 }
+
+
+/* =========================================================
+   Persistent Scene 1 annotation
+========================================================= */
+
+.persistent-tooltip-background {
+  fill: #fffdf8;
+  stroke: #a84a43;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 5px 10px rgba(29, 42, 39, 0.14));
+}
+
+.persistent-tooltip-title {
+  fill: #a84a43;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.persistent-tooltip-text {
+  fill: #5e6c67;
+  font-size: 0.78rem;
+}
+
+.persistent-tooltip-line {
+  fill: none;
+  stroke: #a84a43;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.persistent-tooltip-target {
+  fill: #a84a43;
+  stroke: #fffdf8;
+  stroke-width: 2;
+}
