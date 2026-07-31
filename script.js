@@ -683,7 +683,9 @@ function updateSceneOneSummary(sceneData) {
        <strong>${d3.format(",.0f")(
          Math.abs(latestRecord.housing_gap_thousands)
        )} thousand units</strong>.
-       Note: 2020 had a decrease in households, which is reflected in the data.
+     </p>
+     <p>
+       Note: The 2020 decrease in new households is likely due to the COVID-19 pandemic, which affected household formation and housing market dynamics.
      </p>`;
 }
 
@@ -870,29 +872,169 @@ function createSceneTwoChart(data) {
     }
   );
 
-  addDirectLineLabel(
+//  addDirectLineLabel(
+//    plotGroup,
+//    sceneData[sceneData.length - 1],
+//    yearScale,
+//    rateScale,
+//    "mortgage_rate_percent",
+//    "APR",
+//    "#1d6655",
+//    -12
+//  );
+
+//  addDirectLineLabel(
+//    plotGroup,
+//    sceneData[sceneData.length - 1],
+//    yearScale,
+//    paymentScale,
+//    "monthly_mortgage_payment_dollars",
+//    "Payment",
+//    "#b66b35",
+//    18
+//  );
+
+  addSceneTwoPersistentTooltip(
     plotGroup,
-    sceneData[sceneData.length - 1],
     yearScale,
     rateScale,
-    "mortgage_rate_percent",
-    "APR",
-    "#1d6655",
-    -12
-  );
-
-  addDirectLineLabel(
-    plotGroup,
-    sceneData[sceneData.length - 1],
-    yearScale,
-    paymentScale,
-    "monthly_mortgage_payment_dollars",
-    "Payment",
-    "#b66b35",
-    18
+    innerWidth
   );
 
   updateSceneTwoSummary(sceneData);
+}
+
+/**
+ * Adds a persistent annotation explaining the rapid increase
+ * in mortgage rates between 2022 and 2023.
+ */
+function addSceneTwoPersistentTooltip(
+  plotGroup,
+  yearScale,
+  rateScale,
+  innerWidth
+) {
+
+  /*
+   * Place the arrow near the middle of the steep rise.
+   */
+  const targetYear = 2022.5;
+
+  const targetRate = 6.0;
+
+  const targetX = yearScale(targetYear);
+  const targetY = rateScale(targetRate);
+
+  const tooltipWidth = 330;
+  const tooltipHeight = 105;
+
+  //const tooltipX = Math.max(
+  //  20,
+  //  Math.min(targetX - 250, innerWidth - tooltipWidth - 20)
+  //);
+
+  const tooltipY = 25;
+  const tooltipX = 70;
+
+  const annotation = plotGroup
+    .append("g")
+    .attr("class", "scene-two-annotation");
+
+  /*
+   * Connector line
+   */
+  annotation
+    .append("path")
+    .attr(
+      "d",
+      `
+      M ${tooltipX + tooltipWidth}
+        ${tooltipY + tooltipHeight / 2}
+
+      C ${targetX - 70}
+        ${tooltipY + tooltipHeight},
+
+        ${targetX - 20}
+        ${targetY - 40},
+
+        ${targetX}
+        ${targetY}
+      `
+    )
+    .attr("fill", "none")
+    .attr("stroke", "#a84a43")
+    .attr("stroke-width", 2.5);
+
+  /*
+   * Target point
+   */
+  annotation
+    .append("circle")
+    .attr("cx", targetX)
+    .attr("cy", targetY)
+    .attr("r", 5)
+    .attr("fill", "#a84a43");
+
+  /*
+   * Tooltip box
+   */
+  annotation
+    .append("rect")
+    .attr("x", tooltipX)
+    .attr("y", tooltipY)
+    .attr("width", tooltipWidth)
+    .attr("height", tooltipHeight)
+    .attr("rx", 8)
+    .attr("fill", "#fffdf8")
+    .attr("stroke", "#a84a43")
+    .attr("stroke-width", 1.5);
+
+  /*
+   * Title
+   */
+  annotation
+    .append("text")
+    .attr("x", tooltipX + 15)
+    .attr("y", tooltipY + 22)
+    .attr("fill", "#a84a43")
+    .attr("font-size", "14px")
+    .attr("font-weight", 700)
+    .text("Rapid increase in mortgage rates");
+
+  /*
+   * Body text
+   */
+  annotation
+    .append("text")
+    .attr("x", tooltipX + 15)
+    .attr("y", tooltipY + 46)
+    .attr("fill", "#555")
+    .attr("font-size", "12px")
+    .text("Between 2021 and 2023, mortgage");
+
+  annotation
+    .append("text")
+    .attr("x", tooltipX + 15)
+    .attr("y", tooltipY + 64)
+    .attr("fill", "#555")
+    .attr("font-size", "12px")
+    .text("rates rose from about 3% to nearly 7%.");
+
+  annotation
+    .append("text")
+    .attr("x", tooltipX + 15)
+    .attr("y", tooltipY + 82)
+    .attr("fill", "#555")
+    .attr("font-size", "12px")
+    .text("The monthly payment increased by");
+
+  annotation
+    .append("text")
+    .attr("x", tooltipX + 15)
+    .attr("y", tooltipY + 100)
+    .attr("fill", "#555")
+    .attr("font-size", "12px")
+    .text("approximately 55% on the same loan.");
 }
 
 /*
@@ -1105,7 +1247,166 @@ function createSceneThreeChart(data) {
     }
   );
 
+  addSceneThreePersistentTooltip(
+    plotGroup,
+    sceneData,
+    yearScale,
+    valueScale,
+    innerWidth
+  );
+
   updateSceneThreeSummary(sceneData);
+}
+
+/**
+ * Adds an always-visible annotation to the year with the
+ * largest gap between mortgage-payment growth and income growth.
+ */
+function addSceneThreePersistentTooltip(
+  plotGroup,
+  sceneData,
+  yearScale,
+  valueScale,
+  innerWidth
+) {
+  /*
+   * Find the year where mortgage-payment growth exceeded
+   * income growth by the largest amount.
+   */
+  const widestGapRecord = d3.greatest(
+    sceneData,
+    record =>
+      record.mortgage_payment_growth_percent -
+      record.income_growth_percent
+  );
+
+  const growthGap =
+    widestGapRecord.mortgage_payment_growth_percent -
+    widestGapRecord.income_growth_percent;
+
+  /*
+   * Point the annotation at the mortgage-payment growth line.
+   */
+  const targetX = yearScale(widestGapRecord.year);
+
+  const targetY = valueScale(
+    widestGapRecord.mortgage_payment_growth_percent
+  );
+
+  const tooltipWidth = 325;
+  const tooltipHeight = 100;
+
+  /*
+   * Position the box to the left of the 2022 spike.
+   */
+  const tooltipX = Math.max(
+    20,
+    Math.min(
+      targetX - tooltipWidth - 55,
+      innerWidth - tooltipWidth - 20
+    )
+  );
+
+  const tooltipY = 25;
+
+  const annotationGroup = plotGroup
+    .append("g")
+    .attr("class", "scene-three-annotation");
+
+  /*
+   * Connector line from the box to the orange point.
+   */
+  annotationGroup
+    .append("path")
+    .attr(
+      "d",
+      `
+        M ${tooltipX + tooltipWidth}
+          ${tooltipY + tooltipHeight / 2}
+
+        C ${targetX - 70}
+          ${tooltipY + tooltipHeight},
+
+          ${targetX - 35}
+          ${targetY - 35},
+
+          ${targetX}
+          ${targetY}
+      `
+    )
+    .attr("fill", "none")
+    .attr("stroke", "#a84a43")
+    .attr("stroke-width", 2.5)
+    .attr("stroke-linecap", "round");
+
+  /*
+   * Highlight the exact point.
+   */
+  annotationGroup
+    .append("circle")
+    .attr("cx", targetX)
+    .attr("cy", targetY)
+    .attr("r", 6)
+    .attr("fill", "#a84a43")
+    .attr("stroke", "#fffdf8")
+    .attr("stroke-width", 2);
+
+  /*
+   * Tooltip background.
+   */
+  annotationGroup
+    .append("rect")
+    .attr("x", tooltipX)
+    .attr("y", tooltipY)
+    .attr("width", tooltipWidth)
+    .attr("height", tooltipHeight)
+    .attr("rx", 9)
+    .attr("fill", "#fffdf8")
+    .attr("stroke", "#a84a43")
+    .attr("stroke-width", 1.5);
+
+  /*
+   * Tooltip title.
+   */
+  annotationGroup
+    .append("text")
+    .attr("x", tooltipX + 15)
+    .attr("y", tooltipY + 23)
+    .attr("fill", "#a84a43")
+    .attr("font-size", "14px")
+    .attr("font-weight", 800)
+    .text("Affordability gap widens");
+
+  /*
+   * Tooltip body.
+   */
+  annotationGroup
+    .append("text")
+    .attr("x", tooltipX + 15)
+    .attr("y", tooltipY + 48)
+    .attr("fill", "#5e6c67")
+    .attr("font-size", "12px")
+    .text(
+      `In ${widestGapRecord.year}, mortgage payments grew`
+    );
+
+  annotationGroup
+    .append("text")
+    .attr("x", tooltipX + 15)
+    .attr("y", tooltipY + 67)
+    .attr("fill", "#5e6c67")
+    .attr("font-size", "12px")
+    .text(
+      `${d3.format(".1f")(growthGap)} percentage points faster`
+    );
+
+  annotationGroup
+    .append("text")
+    .attr("x", tooltipX + 15)
+    .attr("y", tooltipY + 86)
+    .attr("fill", "#5e6c67")
+    .attr("font-size", "12px")
+    .text("than median household income.");
 }
 
 /*
