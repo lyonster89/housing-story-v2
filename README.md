@@ -105,52 +105,6 @@ mortgage cost as a percentage of income =
 annual mortgage cost / median household income * 100
 ```
 
-## Run the project locally
-
-The data is loaded with JavaScript, so use a local web server instead of opening `index.html` directly.
-
-### Python
-
-Open a terminal in the project folder and run:
-
-```bash
-python -m http.server 8000
-```
-
-Then visit:
-
-```text
-http://localhost:8000
-```
-
-### Visual Studio Code
-
-1. Open the project folder.
-2. Install the Live Server extension.
-3. Right-click `index.html`.
-4. Select **Open with Live Server**.
-
-## Data requirements
-
-The website expects this file:
-
-```text
-data/processed/housing_pressure_last_10_years.json
-```
-
-The JSON must contain annual records with these source fields:
-
-```text
-year
-total_households_thousands
-housing_completions_thousands
-mortgage_rate_percent
-median_household_income_dollars
-income_growth_percent
-```
-
-The remaining values are calculated by `script.js`.
-
 ## Important limitations
 
 - Housing completions are used as a national approximation of new housing becoming available.
@@ -158,3 +112,63 @@ The remaining values are calculated by `script.js`.
 - Mortgage payments represent principal and interest only.
 - The fixed $200,000 loan isolates interest-rate effects and does not represent changes in home prices.
 - National figures do not describe every local housing market.
+
+
+# References
+
+## Data Sources
+
+Federal Reserve Bank of St. Louis. (2025). *30-Year Fixed Rate Mortgage Average in the United States (MORTGAGE30US).* Federal Reserve Economic Data (FRED). https://fred.stlouisfed.org/series/MORTGAGE30US
+
+Federal Reserve Bank of St. Louis. (2025). *Median Sales Price of Houses Sold for the United States (MSPUS).* Federal Reserve Economic Data (FRED). https://fred.stlouisfed.org/series/MSPUS
+
+Federal Reserve Bank of St. Louis. (2025). *Median Household Income in the United States (MEHOINUSA646N).* Federal Reserve Economic Data (FRED). https://fred.stlouisfed.org/series/MEHOINUSA646N
+
+Federal Reserve Bank of St. Louis. (2025). *Total Households (TTLHH).* Federal Reserve Economic Data (FRED). https://fred.stlouisfed.org/series/TTLHH
+
+Federal Reserve Bank of St. Louis. (2025). *Total Housing Units (ETOTALUSQ176N).* Federal Reserve Economic Data (FRED). https://fred.stlouisfed.org/series/ETOTALUSQ176N
+
+United States Census Bureau. (2025). *New Residential Construction.* https://www.census.gov/construction/nrc/
+
+United States Census Bureau. (2024). *American Community Survey Table B25004: Vacancy Status.* https://data.census.gov/
+
+Zillow Research. (2025). *Zillow Observed Rent Index (ZORI).* https://www.zillow.com/research/data/
+
+---
+
+## Software Libraries
+
+Bostock, M. (2025). *D3.js: Data-Driven Documents.* https://d3js.org/
+
+The Pandas Development Team. (2025). *pandas.* https://pandas.pydata.org/
+
+Python Software Foundation. (2025). *Python 3.* https://www.python.org/
+
+OpenPyXL Developers. (2025). *openpyxl.* https://openpyxl.readthedocs.io/
+
+---
+
+
+## Mortgage Payment Formula
+
+The monthly mortgage payment is calculated using the standard fixed-rate amortization formula:
+
+\[
+M =
+P
+\frac{r(1+r)^n}
+{(1+r)^n-1}
+\]
+
+where:
+
+- **M** = monthly mortgage payment
+- **P** = loan principal
+- **r** = monthly interest rate
+- **n** = total number of monthly payments
+
+The visualization assumes:
+
+- Loan amount: **$200,000**
+- Loan term: **30 years (360 payments)**
+- Principal and interest only (property taxes, insurance, PMI, and HOA fees are excluded)
