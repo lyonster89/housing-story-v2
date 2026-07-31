@@ -557,6 +557,7 @@ function updateSceneOneSummary(sceneData) {
        <strong>${d3.format(",.0f")(
          Math.abs(latestRecord.housing_gap_thousands)
        )} thousand units</strong>.
+       Note: 2020 had a decrease in households, which is reflected in the data.
      </p>`;
 }
 
