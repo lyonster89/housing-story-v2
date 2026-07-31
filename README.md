@@ -147,28 +147,3 @@ Python Software Foundation. (2025). *Python 3.* https://www.python.org/
 OpenPyXL Developers. (2025). *openpyxl.* https://openpyxl.readthedocs.io/
 
 ---
-
-
-## Mortgage Payment Formula
-
-The monthly mortgage payment is calculated using the standard fixed-rate amortization formula:
-
-\[
-M =
-P
-\frac{r(1+r)^n}
-{(1+r)^n-1}
-\]
-
-where:
-
-- **M** = monthly mortgage payment
-- **P** = loan principal
-- **r** = monthly interest rate
-- **n** = total number of monthly payments
-
-The visualization assumes:
-
-- Loan amount: **$200,000**
-- Loan term: **30 years (360 payments)**
-- Principal and interest only (property taxes, insurance, PMI, and HOA fees are excluded)
