@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Housing Pressure in the United States</title>
+
+  <meta
+    name="description"
+    content="An interactive narrative visualization examining housing growth, mortgage rates, income, and affordability."
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-title" href="#scene-1">Housing Pressure</a>
+
+      <nav class="scene-navigation" aria-label="Scene navigation">
+        <a href="#scene-1">Supply</a>
+        <a href="#scene-2">Mortgage Rates</a>
+        <a href="#scene-3">Income</a>
+        <a href="#scene-4">Explore</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="content-width">
+        <p class="eyebrow">CS 416 Narrative Visualization</p>
+        <h1>Is housing supply keeping up with household growth?</h1>
+
+        <p class="hero-copy">
+          This visualization compares household formation, new housing,
+          mortgage rates, household income, and the cost of financing a
+          $200,000 home.
+        </p>
+
+        <a class="primary-button" href="#scene-1">Begin the story</a>
+      </div>
+    </section>
+
+    <section id="scene-1" class="scene">
+      <div class="content-width">
+        <div class="scene-heading">
+          <p class="eyebrow">Scene 1</p>
+          <h2>Is the housing market keeping up?</h2>
+
+          <p>
+            New households represent added demand. Housing completions
+            represent newly completed homes entering the housing stock.
+            Comparing the two shows whether new construction kept pace with
+            household growth.
+          </p>
+        </div>
+
+        <div class="formula-card">
+          <span class="formula-label">Annual housing gap</span>
+          <strong>
+            New housing completions − New households
+          </strong>
+          <p>
+            A positive gap means construction exceeded household growth.
+            A negative gap means household growth exceeded construction.
+          </p>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title-row">
+            <div>
+              <h3>New households versus housing completions</h3>
+              <p>Annual values are shown in thousands.</p>
+            </div>
+
+            <div class="legend" aria-label="Chart legend">
+              <span><i class="legend-swatch households-swatch"></i>New households</span>
+              <span><i class="legend-swatch completions-swatch"></i>Housing completions</span>
+            </div>
+          </div>
+
+          <div
+            id="scene-1-chart"
+            class="chart-container"
+            aria-label="Grouped bar chart comparing new households with housing completions"
+          ></div>
+        </div>
+
+        <div id="scene-1-summary" class="insight-card"></div>
+
+        <a class="next-scene-link" href="#scene-2">
+          Next: What did mortgage rates do?
+        </a>
+      </div>
+    </section>
+
+    <section id="scene-2" class="scene alternate-scene">
+      <div class="content-width">
+        <div class="scene-heading">
+          <p class="eyebrow">Scene 2</p>
+          <h2>Small rate changes create large payment changes</h2>
+
+          <p>
+            The annual mortgage rate is used to calculate the monthly
+            principal-and-interest payment on a fixed $200,000, 30-year loan.
+          </p>
+        </div>
+
+        <div class="formula-card">
+          <span class="formula-label">Monthly mortgage payment</span>
+          <strong>
+            Loan amount × monthly rate calculation over 360 payments
+          </strong>
+          <p>
+            The payment excludes property taxes, homeowners insurance,
+            mortgage insurance, and association fees.
+          </p>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title-row">
+            <div>
+              <h3>Mortgage APR and monthly payment</h3>
+              <p>Hover over a year to see its exact rate and payment.</p>
+            </div>
+          </div>
+
+          <div
+            id="scene-2-chart"
+            class="chart-container"
+            aria-label="Line chart comparing mortgage rates with monthly mortgage payments"
+          ></div>
+        </div>
+
+        <div id="scene-2-summary" class="insight-card"></div>
+
+        <a class="next-scene-link" href="#scene-3">
+          Next: Did income keep pace?
+        </a>
+      </div>
+    </section>
+
+    <section id="scene-3" class="scene">
+      <div class="content-width">
+        <div class="scene-heading">
+          <p class="eyebrow">Scene 3</p>
+          <h2>Income growth versus mortgage-payment growth</h2>
+
+          <p>
+            This scene compares annual median household-income growth with
+            annual growth in the payment on the same $200,000 mortgage.
+            Keeping the loan amount fixed isolates the effect of interest rates.
+          </p>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title-row">
+            <div>
+              <h3>Year-over-year percentage change</h3>
+              <p>
+                Income data currently ends in 2024, so this comparison does not
+                include 2025.
+              </p>
+            </div>
+
+            <div class="legend" aria-label="Chart legend">
+              <span><i class="legend-swatch income-swatch"></i>Median income growth</span>
+              <span><i class="legend-swatch payment-swatch"></i>Mortgage-payment growth</span>
+            </div>
+          </div>
+
+          <div
+            id="scene-3-chart"
+            class="chart-container"
+            aria-label="Line chart comparing income growth with mortgage-payment growth"
+          ></div>
+        </div>
+
+        <div id="scene-3-summary" class="insight-card"></div>
+
+        <a class="next-scene-link" href="#scene-4">
+          Next: Explore all measures
+        </a>
+      </div>
+    </section>
+
+    <section id="scene-4" class="scene alternate-scene">
+      <div class="content-width">
+        <div class="scene-heading">
+          <p class="eyebrow">Scene 4</p>
+          <h2>Explore the measures together</h2>
+
+          <p>
+            Select one or more measures. Each selected series is indexed to
+            100 in its first available year so values with different units can
+            be compared on the same chart.
+          </p>
+        </div>
+
+        <div class="explorer-layout">
+          <aside class="control-panel">
+            <h3>Choose datasets</h3>
+
+            <div id="metric-checkboxes" class="checkbox-list"></div>
+
+            <button id="reset-metrics-button" class="secondary-button" type="button">
+              Reset selections
+            </button>
+
+            <div class="control-note">
+              <strong>How to read the index</strong>
+              <p>
+                A value of 120 means the measure is 20% higher than its first
+                available value in the selected period.
+              </p>
+            </div>
+          </aside>
+
+          <div class="chart-card explorer-chart-card">
+            <div class="chart-title-row">
+              <div>
+                <h3>Indexed comparison</h3>
+                <p id="scene-4-selection-message">
+                  Select at least one dataset.
+                </p>
+              </div>
+            </div>
+
+            <div
+              id="scene-4-chart"
+              class="chart-container"
+              aria-label="Interactive indexed comparison chart"
+            ></div>
+          </div>
+        </div>
+
+        <div class="method-card">
+          <h3>Important interpretation notes</h3>
+          <p>
+            Housing completions are used as the measure of new housing
+            available. Mortgage payments include principal and interest only.
+            The comparison is national, so it does not capture local shortages
+            or differences among metropolitan areas.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="content-width">
+      <p>
+        Data sources include the Federal Reserve Economic Data service,
+        U.S. Census Bureau, and Zillow.
+      </p>
+    </div>
+  </footer>
+
+  <div id="chart-tooltip" class="chart-tooltip" role="status"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="script.js"></script>
+</body>
+</html>
