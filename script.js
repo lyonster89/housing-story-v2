@@ -1079,6 +1079,10 @@ function updateSceneTwoSummary(sceneData) {
        <strong>${d3.format("$,.0f")(paymentIncrease)} per month</strong>,
        or approximately
        <strong>${d3.format(".1f")(paymentIncreasePercent)}%</strong>.
+     </p>
+     <p>
+       Families that purchased a home in <strong>2021</strong> would likely have had a mortgage payment of around <strong>$850</strong>, while another family that purchased
+       a home in that same neighborhood in <strong>2023</strong> might have had a payment of around <strong>$1,300</strong>.
      </p>`;
 }
 
